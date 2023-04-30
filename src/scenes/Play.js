@@ -4,19 +4,19 @@ class Play extends Phaser.Scene{
     }
 
     preload(){
+        // Load texture Atlas
+        this.load.atlas('enemyatlas','assets/enemyatlas.png','assets/enemyatlas.json');
+
         // Load images
         this.load.image('rocket','./assets/rocket.png');
-        this.load.image('spaceship','./assets/spaceship.png');
         this.load.image('starfield','./assets/starfield.png');
         this.load.image('starfield_back','./assets/starfield_back.png');
         this.load.image('starfield_far','./assets/starfield_far.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
-        this.load.spritesheet('smallShip_anim','./assets/smallShip_anim.png', {frameWidth: 32, frameHeight: 32, startFrame: 0, endFrame: 3})
     }
 
     create(){
-
         this.starfield = this.add.tileSprite(0,0,640,480,'starfield').setOrigin(0,0);
         this.starfield_back = this.add.tileSprite(0,0,640,480,'starfield_back').setOrigin(0,0);4
         this.starfield_far = this.add.tileSprite(0,0,640,480,'starfield_far').setOrigin(0,0);
@@ -36,16 +36,35 @@ class Play extends Phaser.Scene{
     
         this.anims.create({
             key: 'smallship',
-            frames: this.anims.generateFrameNumbers('smallShip_anim', {start: 0, end: 3, first: 0}),
+            frames: this.anims.generateFrameNames('enemyatlas', {
+                prefix: 'Small (',
+                start: 1,
+                end: 4,
+                suffix: ')'
+            }),
             frameRate: 10,
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'bigship',
+            frames: this.anims.generateFrameNames('enemyatlas', {
+                prefix: 'Big (',
+                start: 1,
+                end: 2,
+                suffix: ')'
+            }),
+            frameRate: 4,
+            repeat: -1
+        });
+
         // add spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'smallShip_anim', 0, 100, 6).setOrigin(0, 0);
-        this.ship01.anims.play('smallship');
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20, 3).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10, 3).setOrigin(0,0);
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'enemyatlas', 'Small (1)', 100, 6).setOrigin(0, 0);
+        this.ship01.play('smallship',true);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'enemyatlas', 'Big (1)', 20, 3).setOrigin(0,0);
+        this.ship02.play('bigship',true);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'enemyatlas', 'Big (1)', 10, 3).setOrigin(0,0);
+        this.ship03.play('bigship',true);
 
         // Define inputs
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
