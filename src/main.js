@@ -1,8 +1,12 @@
+'use strict';
+
 let config = {
     type: Phaser.AUTO,
     width: 640,
     height: 480,
     autoCenter: true,
+    pixelArt: true,
+    backgroundColor: '#FCD581',
     scene: [ Menu, Play ]
   }
 
