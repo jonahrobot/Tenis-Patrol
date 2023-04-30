@@ -105,9 +105,10 @@ class Play extends Phaser.Scene{
 
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or (M) for Menu', this.scoreConfig).setOrigin(0.5);
             currentPlayer = 0;
+            p1Score = 0;
+            p2Score = 0;
         }
-        p1Score = 0;
-        p2Score = 0;
+      
         this.gameOver = true;
     }
 
@@ -161,6 +162,13 @@ class Play extends Phaser.Scene{
 
     shipExplode(ship){
         ship.alpha = 0;
+
+        this.timer.reset({
+            delay: this.timer.getRemaining() + 10000,
+            callback: () => {
+                this.gameEnd();
+            }
+        })
         
         let boom = this.add.sprite(ship.x,ship.y, 'explosion').setOrigin(0,0);
         boom.anims.play('explode');
